@@ -2,6 +2,7 @@
 
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show edit update destroy]
+  before_action :require_author, only: %i[edit update destroy]
 
   # GET /posts
   # GET /posts.json
@@ -60,6 +61,10 @@ class PostsController < ApplicationController
       format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def require_author
+    redirect_to(site_home_url) unless @post.user == current_user
   end
 
   private
